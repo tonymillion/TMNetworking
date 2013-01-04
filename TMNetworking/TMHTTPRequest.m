@@ -277,7 +277,6 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
     // end the background task
     if(_networkTaskID != UIBackgroundTaskInvalid)
     {
-        NSLog(@"Ending background task (%d) nicely", _networkTaskID);
         [[UIApplication sharedApplication] endBackgroundTask:_networkTaskID];
         _networkTaskID = UIBackgroundTaskInvalid;
     }

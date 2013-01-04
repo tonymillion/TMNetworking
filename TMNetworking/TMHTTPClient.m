@@ -100,6 +100,12 @@
         [self setValue:@"application/json"
              forHeader:@"Accept"];
     }
+    else
+    {
+     [self setValue:@"*/*"
+          forHeader:@"Accept"];
+
+    }
 }
 
 -(NSMutableURLRequest *)requestWithMethod:(NSString *)method
@@ -111,7 +117,9 @@
     NSURL *url = [NSURL URLWithString:path
                         relativeToURL:self.baseURL];
     
-	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url
+                                                                cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                                            timeoutInterval:30];
     
     [request setHTTPMethod:method];
     [request setAllHTTPHeaderFields:_headers];
@@ -172,8 +180,6 @@
                               constructingBodyWithBlock:(void (^)(id<TMMultipartFormDataProtocol> formData))formdataBlock
                                                   error:(NSError *__autoreleasing *)error
 {
-    
-    
     NSMutableURLRequest *request = [self requestWithMethod:method
                                                       path:path
                                                 parameters:nil
@@ -419,7 +425,6 @@
     // end the background task
     if(_networkTaskID != UIBackgroundTaskInvalid)
     {
-        NSLog(@"Ending background task (%d) nicely", _networkTaskID);
         [[UIApplication sharedApplication] endBackgroundTask:_networkTaskID];
         _networkTaskID = UIBackgroundTaskInvalid;
     }
