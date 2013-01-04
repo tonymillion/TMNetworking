@@ -56,7 +56,7 @@ typedef enum {
                                     failure:(void (^)(TMHTTPRequest *request, id responseObject, NSError *error))failure;
 
 -(void)startHTTPRequestOperation:(TMHTTPRequest *)request;
--(void)executeSynchronousRequest:(NSURLRequest*)request
+-(BOOL)executeSynchronousRequest:(NSURLRequest*)request
                          success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject))success
                          failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject, NSError *error))failure;
 
@@ -85,5 +85,32 @@ typedef enum {
                  parameters:(NSDictionary *)parameters
                     success:(void (^)(TMHTTPRequest *request, id responseObject))success
                     failure:(void (^)(TMHTTPRequest *request, id responseObject, NSError *error))failure;
+
+
+
+
+
+-(BOOL)syncGetPath:(NSString *)path
+        parameters:(NSDictionary *)parameters
+           success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject))success
+           failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject, NSError *error))failure;
+
+
+
+-(BOOL)syncPostPath:(NSString *)path
+         parameters:(NSDictionary *)parameters
+            success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject))success
+            failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject, NSError *error))failure;
+
+-(BOOL)syncPutPath:(NSString *)path
+        parameters:(NSDictionary *)parameters
+           success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject))success
+           failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject, NSError *error))failure;
+
+
+-(BOOL)syncDeletePath:(NSString *)path
+           parameters:(NSDictionary *)parameters
+              success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject))success
+              failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject, NSError *error))failure;
 
 @end
