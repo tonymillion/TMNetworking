@@ -130,7 +130,7 @@ typedef void (^TMHTTPProgressBlock)(TMHTTPRequest *request, unsigned long long s
 {
     //When called alloc a new data to write into
     _response = (NSHTTPURLResponse*)response;
-    NSLog(@"headers = %@", _response.allHeaderFields);
+
     _contentType = [_response MIMEType];
     if(!_contentType)
     {
@@ -145,7 +145,6 @@ typedef void (^TMHTTPProgressBlock)(TMHTTPRequest *request, unsigned long long s
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     // append to a data
-    NSLog(@"didReceiveData: %d", data.length);
     [_downloadedData appendData:data];
     
     if(self.internalProgressBlock)
@@ -166,8 +165,6 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    NSLog(@"connectionDidFinishLoading: %@", connection);
-    
     if([[TMHTTPRequest acceptableJSONContentTypes] containsObject:_contentType])
     {
         // this was JSON
