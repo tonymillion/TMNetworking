@@ -73,6 +73,11 @@
 
 -(void)setBearerAuthorizationHeaderWithToken:(NSString *)token
 {
+    if(token == nil)
+    {
+        [self clearAuthorizationHeader];
+        return;
+    }
     
     [self setValue:[NSString stringWithFormat:@"Bearer %@", token]
          forHeader:@"Authorization"];
@@ -80,6 +85,11 @@
 
 -(void)setAuthorizationHeaderWithType:(NSString*)type  token:(NSString *)token
 {
+    if(token == nil || type==nil)
+    {
+        [self clearAuthorizationHeader];
+        return;
+    }
     
     [self setValue:[NSString stringWithFormat:@"%@ %@", type, token]
          forHeader:@"Authorization"];
@@ -122,6 +132,9 @@
                                                             timeoutInterval:30];
     
     [request setHTTPMethod:method];
+    
+    DLog(@"headers = %@", _headers);
+    
     [request setAllHTTPHeaderFields:_headers];
     [request setHTTPShouldUsePipelining:YES];
     
