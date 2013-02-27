@@ -133,8 +133,6 @@
     
     [request setHTTPMethod:method];
     
-    DLog(@"headers = %@", _headers);
-    
     [request setAllHTTPHeaderFields:_headers];
     [request setHTTPShouldUsePipelining:YES];
     
@@ -329,8 +327,6 @@
     __block UIBackgroundTaskIdentifier _networkTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         if(_networkTaskID != UIBackgroundTaskInvalid)
         {
-            NSLog(@"Ending background task (%d) NASTILY", _networkTaskID);
-            
             [[UIApplication sharedApplication] endBackgroundTask:_networkTaskID];
             _networkTaskID = UIBackgroundTaskInvalid;
         }

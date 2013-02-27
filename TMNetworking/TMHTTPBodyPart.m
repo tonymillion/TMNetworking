@@ -96,8 +96,6 @@ typedef enum {
     }
     [headerString appendString:kAFMultipartFormCRLF];
     
-    NSLog(@"headerString = %@", headerString);
-    
     return [NSString stringWithString:headerString];
 }
 

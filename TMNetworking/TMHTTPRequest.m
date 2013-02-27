@@ -78,8 +78,6 @@ typedef void (^TMHTTPProgressBlock)(TMHTTPRequest *request, unsigned long long s
     _networkTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         if(_networkTaskID != UIBackgroundTaskInvalid)
         {
-            NSLog(@"Ending background task (%d) NASTILY", _networkTaskID);
-
             [[UIApplication sharedApplication] endBackgroundTask:_networkTaskID];
             _networkTaskID = UIBackgroundTaskInvalid;
         }
@@ -122,7 +120,6 @@ typedef void (^TMHTTPProgressBlock)(TMHTTPRequest *request, unsigned long long s
              willSendRequest:(NSURLRequest *)request
             redirectResponse:(NSURLResponse *)response
 {
-    NSLog(@"willSendRequest: %@", request);
     return request;
 }
 
@@ -160,7 +157,6 @@ typedef void (^TMHTTPProgressBlock)(TMHTTPRequest *request, unsigned long long s
  totalBytesWritten:(NSInteger)totalBytesWritten
 totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
 {
-    NSLog(@"didSendBodyData: %ul/%ul/%ul", bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
@@ -221,9 +217,6 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
 
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    NSLog(@"didFailWithError %@", error);
-    
-    
     dispatch_async(_dispatchQueue, ^{
         [self determineSuccessAndSend:nil
                                 error:error];
