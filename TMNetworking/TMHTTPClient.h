@@ -43,6 +43,12 @@ typedef enum {
                         parameterEncoding:(TMHTTPClientParameterEncoding)paramEncoding
                                     error:(NSError *__autoreleasing *)error;
 
+-(NSMutableURLRequest *)requestWithMethod:(NSString *)method
+                                     path:(NSString *)path
+                               bodyStream:(NSInputStream *)bodyStream
+                                    error:(NSError *__autoreleasing *)error;
+
+
 
 - (NSMutableURLRequest *)multipartFormRequestWithMethod:(NSString *)method
                                                    path:(NSString *)path
@@ -70,6 +76,13 @@ typedef enum {
 				parameters:(NSDictionary *)parameters
 				   success:(void (^)(TMHTTPRequest *request, id responseObject))success
                    failure:(void (^)(TMHTTPRequest *request, id responseObject, NSError *error))failure;
+
+- (TMHTTPRequest*)postPath:(NSString *)path
+				parameters:(NSDictionary *)parameters
+         parameterEncoding:(TMHTTPClientParameterEncoding)paramEncoding
+				   success:(void (^)(TMHTTPRequest *request, id responseObject))success
+                   failure:(void (^)(TMHTTPRequest *request, id responseObject, NSError *error))failure;
+
 
 - (TMHTTPRequest*)putPath:(NSString *)path
 			   parameters:(NSDictionary *)parameters

@@ -8,6 +8,8 @@
 
 #import "TMHTTPRequest.h"
 
+#import "TMNetworkActivityIndicatorManager.h"
+
 typedef void (^TMHTTPSuccessBlock)(TMHTTPRequest *request, id responseObject);
 typedef void (^TMHTTPFailureBlock)(TMHTTPRequest *request, id responseObject, NSError * error);
 
@@ -75,6 +77,8 @@ typedef void (^TMHTTPProgressBlock)(TMHTTPRequest *request, unsigned long long s
 
 -(void)start
 {
+    [[TMNetworkActivityIndicatorManager sharedManager] incrementActivityCount];
+
     _networkTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         if(_networkTaskID != UIBackgroundTaskInvalid)
         {
@@ -245,6 +249,9 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
             
             [userInfo setValue:[NSString stringWithFormat:NSLocalizedString(@"HTTP Status: %d", @""), _response.statusCode]
                         forKey:NSLocalizedDescriptionKey];
+            
+            [userInfo setValue:object
+                        forKey:@"object"];
 
             if(_internalFailureBlock)
             {
@@ -270,6 +277,9 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
         [[UIApplication sharedApplication] endBackgroundTask:_networkTaskID];
         _networkTaskID = UIBackgroundTaskInvalid;
     }
+    
+    [[TMNetworkActivityIndicatorManager sharedManager] decrementActivityCount];
+
 }
 
 @end

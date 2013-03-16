@@ -112,10 +112,31 @@
     }
     else
     {
-     [self setValue:@"*/*"
-          forHeader:@"Accept"];
-
+        [self setValue:@"*/*"
+             forHeader:@"Accept"];
+        
     }
+}
+
+-(NSMutableURLRequest *)requestWithMethod:(NSString *)method
+                                     path:(NSString *)path
+                               bodyStream:(NSInputStream *)bodyStream
+                                    error:(NSError *__autoreleasing *)error
+{
+    NSURL *url = [NSURL URLWithString:path
+                        relativeToURL:self.baseURL];
+    
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url
+                                                                cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                                            timeoutInterval:30];
+    
+    [request setHTTPMethod:method];
+    
+    [request setAllHTTPHeaderFields:_headers];
+    [request setHTTPShouldUsePipelining:YES];
+    
+    [request setHTTPBodyStream:bodyStream];
+    return request;
 }
 
 -(NSMutableURLRequest *)requestWithMethod:(NSString *)method
@@ -151,30 +172,30 @@
             switch (paramEncoding)
             {
                 case TMFormURLParameterEncoding:
-                {
-                    [request setValue:[NSString stringWithFormat:@"application/x-www-form-urlencoded; charset=%@", charset]
-                   forHTTPHeaderField:@"Content-Type"];
-                    
-                    NSString * encodedparams = [parameters URLParameters];
-                    
-                    [request setHTTPBody:[encodedparams dataUsingEncoding:NSUTF8StringEncoding]];
-                }
+                    {
+                        [request setValue:[NSString stringWithFormat:@"application/x-www-form-urlencoded; charset=%@", charset]
+                       forHTTPHeaderField:@"Content-Type"];
+                        
+                        NSString * encodedparams = [parameters URLParameters];
+                        
+                        [request setHTTPBody:[encodedparams dataUsingEncoding:NSUTF8StringEncoding]];
+                    }
                     break;
                     
                 case TMJSONParameterEncoding:
-                {
-                    [request setValue:[NSString stringWithFormat:@"application/json; charset=%@", charset]
-                   forHTTPHeaderField:@"Content-Type"];
-                    
-					NSData * body = [NSJSONSerialization dataWithJSONObject:parameters
-                                                                    options:0
-                                                                      error:error];
-                    
-                    if(!body)
-                        return nil;
-                    
-                    [request setHTTPBody:body];
-                }
+                    {
+                        [request setValue:[NSString stringWithFormat:@"application/json; charset=%@", charset]
+                       forHTTPHeaderField:@"Content-Type"];
+                        
+                        NSData * body = [NSJSONSerialization dataWithJSONObject:parameters
+                                                                        options:0
+                                                                          error:error];
+                        
+                        if(!body)
+                            return nil;
+                        
+                        [request setHTTPBody:body];
+                    }
                     break;
             }
         }
@@ -481,6 +502,28 @@
                                                   path:path
                                             parameters:parameters
                                      parameterEncoding:_defaultParameterEncoding
+                                                 error:nil];
+    if(!URLrequest)
+        return nil;
+    
+	TMHTTPRequest *operation = [self HTTPRequestWithURLRequest:URLrequest
+                                                       success:success
+                                                       failure:failure];
+    [self startHTTPRequestOperation:operation];
+    
+    return operation;
+}
+
+- (TMHTTPRequest*)postPath:(NSString *)path
+				parameters:(NSDictionary *)parameters
+         parameterEncoding:(TMHTTPClientParameterEncoding)paramEncoding
+				   success:(void (^)(TMHTTPRequest *request, id responseObject))success
+                   failure:(void (^)(TMHTTPRequest *request, id responseObject, NSError *error))failure
+{
+	NSURLRequest *URLrequest = [self requestWithMethod:@"POST"
+                                                  path:path
+                                            parameters:parameters
+                                     parameterEncoding:paramEncoding
                                                  error:nil];
     if(!URLrequest)
         return nil;
