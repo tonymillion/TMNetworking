@@ -120,10 +120,15 @@ typedef enum {
            success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject))success
            failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject, NSError *error))failure;
 
+-(BOOL)syncPatchPath:(NSString *)path
+          parameters:(NSDictionary *)parameters
+             success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject))success
+             failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject, NSError *error))failure;
 
 -(BOOL)syncDeletePath:(NSString *)path
            parameters:(NSDictionary *)parameters
               success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject))success
               failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject, NSError *error))failure;
+
 
 @end

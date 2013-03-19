@@ -660,6 +660,26 @@
                                    failure:failure];
 }
 
+-(BOOL)syncPatchPath:(NSString *)path
+          parameters:(NSDictionary *)parameters
+             success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject))success
+             failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject, NSError *error))failure
+{
+	NSURLRequest *URLrequest = [self requestWithMethod:@"PATCH"
+                                                  path:path
+                                            parameters:parameters
+                                     parameterEncoding:_defaultParameterEncoding
+                                                 error:nil];
+    if(!URLrequest)
+        return NO;
+    
+    return [self executeSynchronousRequest:URLrequest
+                                   success:success
+                                   failure:failure];
+    
+}
+
+
 -(BOOL)syncDeletePath:(NSString *)path
            parameters:(NSDictionary *)parameters
               success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSData * responseData, id responseObject))success
