@@ -208,6 +208,7 @@
 - (NSMutableURLRequest *)multipartFormRequestWithMethod:(NSString *)method
                                                    path:(NSString *)path
                                              parameters:(NSDictionary *)parameters
+                                          paramPartName:(NSString*)paramPartName
                                       parameterEncoding:(TMHTTPClientParameterEncoding)paramEncoding
                               constructingBodyWithBlock:(void (^)(id<TMMultipartFormDataProtocol> formData))formdataBlock
                                                   error:(NSError *__autoreleasing *)error
@@ -227,12 +228,30 @@
         {
             case TMFormURLParameterEncoding:
             {
+                for (NSString * key in parameters) {
+                    id value = parameters[key];
+                    
+                    NSString * valueString = [NSString stringWithFormat:@"%@", value];
+                    
+                    
+                    NSString * dispositionString = [NSString stringWithFormat:@"form-data; name=\"%@\"", key];
+                    
+                    [formData appendPartWithHeaders:@{
+                     @"Content-Disposition": dispositionString,
+                     @"Content-Type": @"multipart/form-data"}
+                                               body:[valueString dataUsingEncoding:NSUTF8StringEncoding]];
+                }
+                /*
+                L.append('--' + BOUNDARY)
+                L.append('Content-Disposition: form-data; name="%s"' % key)
+                L.append('')
+                L.append(value)
+                
                 NSString * encodedparams = [parameters URLParameters];
                 
-                [formData appendPartWithHeaders:@{
-                 @"Content-Disposition": @"form-data",
-                 @"Content-Type": @"application/x-www-form-urlencoded"}
+                [formData appendPartWithHeaders:
                                            body:[encodedparams dataUsingEncoding:NSUTF8StringEncoding]];
+                 */
             }
                 break;
                 
@@ -244,10 +263,10 @@
                 
                 if(body)
                 {
-                    [formData appendPartWithHeaders:@{
-                     @"Content-Disposition": @"form-data; name=\"myJsonString\"",
-                     @"Content-Type": @"application/json"}
-                                               body:body];
+                    [formData appendPartWithFileData:body
+                                                name:paramPartName
+                                            fileName:paramPartName
+                                            mimeType:@"application/json"];
                 }
                 
             }
@@ -444,7 +463,6 @@
                              httpResponse:httpResponse
                                   success:success
                                   failure:failure];
-            
         }
     }
     

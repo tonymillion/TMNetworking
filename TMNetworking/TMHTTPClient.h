@@ -53,6 +53,7 @@ typedef enum {
 - (NSMutableURLRequest *)multipartFormRequestWithMethod:(NSString *)method
                                                    path:(NSString *)path
                                              parameters:(NSDictionary *)parameters
+                                          paramPartName:(NSString*)paramPartName
                                       parameterEncoding:(TMHTTPClientParameterEncoding)paramEncoding
                               constructingBodyWithBlock:(void (^)(id<TMMultipartFormDataProtocol> formData))formdataBlock
                                                   error:(NSError *__autoreleasing *)error;
