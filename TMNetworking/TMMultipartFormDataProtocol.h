@@ -63,6 +63,18 @@
 - (void)appendPartWithHeaders:(NSDictionary *)headers
                          body:(NSData *)body;
 
+
+- (void)appendPartWithInputStream:(NSInputStream *)iStream
+                           length:(long long)streamLength
+                             name:(NSString *)name;
+
+- (void)appendPartWithInputStream:(NSInputStream *)iStream
+                           length:(long long)streamLength
+                             name:(NSString *)name
+                         fileName:(NSString *)fileName
+                         mimeType:(NSString *)mimeType;
+
+
 /**
  Throttles request bandwidth by limiting the packet size and adding a delay for each chunk read from the upload stream.
  

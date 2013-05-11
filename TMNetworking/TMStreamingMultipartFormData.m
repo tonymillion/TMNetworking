@@ -142,6 +142,61 @@ static NSString * const kAFMultipartFormBoundary = @"Boundary+0xAbCdEfGbOuNdArY"
                            body:data];
 }
 
+//////////////////////////////////////////////////////////////////
+
+
+- (void)appendPartWithInputStream:(NSInputStream *)iStream
+                           length:(long long)streamLength
+                             name:(NSString *)name
+{
+    NSParameterAssert(name);
+    
+    NSMutableDictionary *mutableHeaders = [NSMutableDictionary dictionary];
+    [mutableHeaders setValue:[NSString stringWithFormat:@"form-data; name=\"%@\"", name]
+                      forKey:@"Content-Disposition"];
+    
+    [self appendPartWithHeaders:mutableHeaders
+                    inputStream:iStream
+                         length:streamLength];
+}
+
+- (void)appendPartWithInputStream:(NSInputStream *)iStream
+                           length:(long long)streamLength
+                             name:(NSString *)name
+                         fileName:(NSString *)fileName
+                         mimeType:(NSString *)mimeType
+{
+    NSMutableDictionary *mutableHeaders = [NSMutableDictionary dictionary];
+    
+    [mutableHeaders setValue:[NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"", name, fileName]
+                      forKey:@"Content-Disposition"];
+    
+    [mutableHeaders setValue:mimeType
+                      forKey:@"Content-Type"];
+
+    
+    [self appendPartWithHeaders:mutableHeaders
+                    inputStream:iStream
+                         length:streamLength];
+}
+
+
+
+
+- (void)appendPartWithHeaders:(NSDictionary *)headers
+                  inputStream:(NSInputStream *)iStream
+                       length:(long long)streamLength
+{
+    TMHTTPBodyPart *bodyPart = [[TMHTTPBodyPart alloc] init];
+    bodyPart.stringEncoding     = self.stringEncoding;
+    bodyPart.headers            = headers;
+    
+    bodyPart.bodyContentLength  = streamLength;
+    bodyPart.inputStream        = iStream;
+    
+    [self.bodyStream appendHTTPBodyPart:bodyPart];
+}
+
 
 - (void)appendPartWithHeaders:(NSDictionary *)headers
                          body:(NSData *)body
