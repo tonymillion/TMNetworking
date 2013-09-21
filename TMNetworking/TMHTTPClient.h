@@ -27,6 +27,7 @@ typedef enum {
 
 -(NSString *)valueForHeader:(NSString *)header;
 -(void)setValue:(NSString *)value forHeader:(NSString *)header;
+-(void)removeHeader:(NSString *)header;
 
 -(void)setBasicAuthorizationHeaderWithUsername:(NSString *)username password:(NSString *)password;
 -(void)setBearerAuthorizationHeaderWithToken:(NSString *)token;

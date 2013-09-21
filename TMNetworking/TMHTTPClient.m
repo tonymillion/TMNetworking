@@ -54,10 +54,22 @@
 	return [_headers valueForKey:header];
 }
 
+-(void)removeHeader:(NSString *)header
+{
+    [_headers removeObjectForKey:header];
+}
+
 -(void)setValue:(NSString *)value forHeader:(NSString *)header
 {
-	[_headers setValue:value
-                forKey:header];
+    if(value == nil)
+    {
+        [self removeHeader:header];
+    }
+    else
+    {
+        [_headers setValue:value
+                    forKey:header];
+    }
 }
 
 -(void)setBasicAuthorizationHeaderWithUsername:(NSString *)username password:(NSString *)password
