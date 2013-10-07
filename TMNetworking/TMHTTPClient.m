@@ -8,7 +8,6 @@
 
 #import "TMHTTPClient.h"
 
-#import "NSData+Base64.h"
 #import "NSDictionary+URLParameterEncoding.h"
 
 #import "TMHTTPRequest.h"
@@ -76,7 +75,7 @@
 {
     // create an auth string, base64 encode it then pass it in the auth header (really???)
 	NSString *basicAuthCredentials = [NSString stringWithFormat:@"%@:%@", username, password];
-    NSString *base64String = [[basicAuthCredentials dataUsingEncoding:NSUTF8StringEncoding] base64Encoding];
+    NSString *base64String = [[basicAuthCredentials dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0];
     
     
     [self setValue:[NSString stringWithFormat:@"Basic %@", base64String]
